@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personal-expense-tracker"
+version = "1.0.0"
+description = "Personal Expense Tracker API built with Django and DRF"
+authors = [
+    {name = "Personal Expense Tracker Team", email = "apiteam@swagger.io"}
+]
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django>=5.0,<6.0",
+    "djangorestframework>=3.15.0",
+    "drf-spectacular>=0.27.0",
+    "drf-spectacular-sidecar>=2023.10.1",
+    "djangorestframework-simplejwt[crypto]>=5.3.0",
+    "django-environ>=0.11.0",
+    "pytest>=7.4.0",
+    "pytest-django>=4.7.0",
+    "model-bakery>=1.17.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "pre-commit>=3.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=4.1.0",
+    "coverage>=7.3.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.setuptools.packages.find]
+include = ["expense_tracker*", "accounts*", "finance*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "expense_tracker.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = "--tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]

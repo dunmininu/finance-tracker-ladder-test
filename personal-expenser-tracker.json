@@ -1,0 +1,831 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Personal Expense Tracker Assessment",
+      "description": "This is a sample Personal Expense Tracker based on the OpenAPI 3.0 specification. Design an API to be used to track a user's expenses. This implementation should be as simple as possible, but still exhaustive enough to showcase most API principles.",
+      "termsOfService": "http://swagger.io/terms/",
+      "contact": {
+        "email": "apiteam@swagger.io"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      },
+      "version": "1.0.11"
+    },
+    "externalDocs": {
+      "description": "Find out more about Swagger",
+      "url": "http://swagger.io"
+    },
+    "servers": [
+      {
+        "url": "https://your-api.url.com"
+      }
+    ],
+    "tags": [
+      {
+        "name": "user",
+        "description": "Operations about a user"
+      },
+      {
+        "name": "income",
+        "description": "Operations about a user's income"
+      },
+      {
+        "name": "expenditure",
+        "description": "Operations about a user's expenditure"
+      }
+    ],
+    "paths": {
+      "/auth/signup": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Register user",
+          "description": "This endpoint is used to create a user using a valid email and password. Bonus points: strong validation on the password field and error handling.",
+          "operationId": "createUser",
+          "requestBody": {
+            "description": "Created user object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResoponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs user into the system",
+          "description": "This endpoint is used to log a user in.",
+          "operationId": "loginUser",
+          "requestBody": {
+            "description": "Created user object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginRequestBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserLoginResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password"
+            }
+          }
+        }
+      },
+      "/auth/logout": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs out current logged in user",
+          "description": "This endpoint invalidates the refresh token and kills the user sesion.",
+          "operationId": "logoutUser",
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "refresh": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2OTkwMDc2OCwianRpIjoiNTE5NjZjOWIxMmNjNDU1NzlkZjllN2VkYmNmZGU5OTEiLCJ1c2VyX2lkIjoiZDRmNGM3MWMtZmQ0Ny00NjhkLWIyMmMtOGYwYjhlNjJiZGYwIn0.mL8_1ABHYH-ASwoOlEQvN2JInUf9QxymXmGTh4ZwwBs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User logged out successfully"
+            },
+            "400": {
+              "description": "Invalid refresh token"
+            }
+          }
+        }
+      },
+      "/auth/user/{userID}/profile": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user by user ID",
+          "description": "",
+          "operationId": "getUserByID",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "path",
+              "description": "The userID that needs to be fetched",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid user ID"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Update user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "updateUser",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Update an existent user in the store",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "first_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User details updated successfully!"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/user/income": {
+        "get": {
+          "tags": [
+            "income"
+          ],
+          "summary": "Get user's income data",
+          "description": "This endpoint returns the user's income",
+          "operationId": "getUserIncome",
+          "responses": {
+            "200": {
+              "description": "success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserIncome"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "income"
+          ],
+          "summary": "Add income data",
+          "description": "This endpoint allows you to add an income. Bonus points if you can come up with some cool additions.",
+          "operationId": "addUserIncome",
+          "requestBody": {
+            "description": "Add new income data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIncomeRequestBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "new income added"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/income/{incomeID}": {
+        "get": {
+          "tags": [
+            "income"
+          ],
+          "summary": "Get income data by ID",
+          "description": "",
+          "operationId": "getIncomeByID",
+          "parameters": [
+            {
+              "name": "incomeID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserDetailIncome"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid income ID"
+            },
+            "404": {
+              "description": "Income not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "income"
+          ],
+          "summary": "Update income data by ID",
+          "description": "",
+          "operationId": "updateIncomeByID",
+          "parameters": [
+            {
+              "name": "incomeID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserIncomeRequestBody"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid income ID"
+            },
+            "404": {
+              "description": "Income not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "income"
+          ],
+          "summary": "Delete income data by ID",
+          "description": "",
+          "operationId": "deleteIncomeByID",
+          "parameters": [
+            {
+              "name": "incomeID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "income deleted successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid income ID / some other type of error"
+            },
+            "404": {
+              "description": "Income not found"
+            }
+          }
+        }
+      },
+      "/user/expenditure": {
+        "get": {
+          "tags": [
+            "expenditure"
+          ],
+          "summary": "Get user's expenditure data",
+          "description": "This endpoint returns the user's expenditure",
+          "operationId": "getUserExpenditure",
+          "responses": {
+            "200": {
+              "description": "success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserExpenditure"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "expenditure"
+          ],
+          "summary": "Add expenditure data",
+          "description": "This endpoint allows you to add an expenditure",
+          "operationId": "addUserExpenditure",
+          "requestBody": {
+            "description": "Add new expenditure data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserExpenditureRequestBody"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "new expenditure added"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/expenditure/{expenditureID}": {
+        "get": {
+          "tags": [
+            "expenditure"
+          ],
+          "summary": "Get expenditure data by ID",
+          "description": "",
+          "operationId": "getExpenditureByID",
+          "parameters": [
+            {
+              "name": "expenditureID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserDetailExpenditure"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid expenditure ID"
+            },
+            "404": {
+              "description": "Expenditure not foun"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "expenditure"
+          ],
+          "summary": "Update expenditure data by ID",
+          "description": "",
+          "operationId": "updateExpenditureByID",
+          "parameters": [
+            {
+              "name": "expenditureID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserDetailExpenditure"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid expenditure ID"
+            },
+            "404": {
+              "description": "Expenditure not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "expenditure"
+          ],
+          "summary": "Delete expenditure data by ID",
+          "description": "",
+          "operationId": "deleteExpenditureByID",
+          "parameters": [
+            {
+              "name": "expenditureID",
+              "in": "path",
+              "description": "",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "expenditure deleted successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid expenditure ID"
+            },
+            "404": {
+              "description": "Expenditure not found"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "first_name": {
+              "type": "string",
+              "example": "John"
+            },
+            "last_name": {
+              "type": "string",
+              "example": "Doe"
+            },
+            "username": {
+              "type": "string",
+              "example": "john_doe"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            }
+          }
+        },
+        "UserLoginRequestBody": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            }
+          }
+        },
+        "UserProfile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+            },
+            "first_name": {
+              "type": "string",
+              "example": "John"
+            },
+            "last_name": {
+              "type": "string",
+              "example": "Doe"
+            },
+            "username": {
+              "type": "string",
+              "example": "john_doe"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            }
+          }
+        },
+        "UserResoponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "message": {
+              "type": "string",
+              "example": "User created successfully"
+            }
+          }
+        },
+        "UserLoginResponse": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john@email.com"
+                },
+                "tokens": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5ODE3OTY4LCJqdGkiOiI0MzdjOWFhMTNhMTk0NTQzYWI3NGE0ZWE5NDEzYTM5YyIsInVzZXJfaWQiOiJkNGY0YzcxYy1mZDQ3LTQ2OGQtYjIyYy04ZjBiOGU2MmJkZjAifQ.RnU7Nt6lXaoYhVvaSit1prgYTlfcfLsD1qsOW5yY-9c"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2OTkwMDc2OCwianRpIjoiNTE5NjZjOWIxMmNjNDU1NzlkZjllN2VkYmNmZGU5OTEiLCJ1c2VyX2lkIjoiZDRmNGM3MWMtZmQ0Ny00NjhkLWIyMmMtOGYwYjhlNjJiZGYwIn0.mL8_1ABHYH-ASwoOlEQvN2JInUf9QxymXmGTh4ZwwBs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "UserIncome": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+              },
+              "nameOfRevenue": {
+                "type": "string",
+                "example": "salary"
+              },
+              "amount": {
+                "type": "number",
+                "example": 500
+              }
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "UserDetailIncome": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+            },
+            "nameOfRevenue": {
+              "type": "string",
+              "example": "salary"
+            },
+            "amount": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "UserIncomeRequestBody": {
+          "type": "object",
+          "properties": {
+            "nameOfRevenue": {
+              "type": "string",
+              "example": "salary"
+            },
+            "amount": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "UserExpenditure": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+              },
+              "category": {
+                "type": "string",
+                "example": "transport"
+              },
+              "nameOfItem": {
+                "type": "string",
+                "example": "transport"
+              },
+              "estimatedAmount": {
+                "type": "number",
+                "example": 500
+              }
+            },
+            "xml": {
+              "name": "user"
+            }
+          }
+        },
+        "UserDetailExpenditure": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "7D1C57A7-72A8-4BC3-A392-E809DE18F7E4"
+            },
+            "category": {
+              "type": "string",
+              "example": "transport"
+            },
+            "nameOfItem": {
+              "type": "string",
+              "example": "transport"
+            },
+            "estimatedAmount": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "UserExpenditureRequestBody": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "example": "transport"
+            },
+            "nameOfItem": {
+              "type": "string",
+              "example": "transport"
+            },
+            "estimatedAmount": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        }
+      }
+    }
+  }
