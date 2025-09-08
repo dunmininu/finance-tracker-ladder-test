@@ -7,7 +7,7 @@ name = "personal-expense-tracker"
 version = "1.0.0"
 description = "Personal Expense Tracker API built with Django and DRF"
 authors = [
-    {name = "Personal Expense Tracker Team", email = "apiteam@swagger.io"}
+    {name = "Personal Expense Tracker Team", email = "alakaoluwaseyi@gmail.com"}
 ]
 license = "Apache-2.0"
 readme = "README.md"

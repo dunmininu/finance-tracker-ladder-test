@@ -24,10 +24,10 @@ mypy_extensions==1.1.0
 nodeenv==1.9.1
 packaging==25.0
 pathspec==0.12.1
--e git+https://github.com/dunmininu/finance-tracker-ladder-test.git@705cd61f5fa43496771f68bd9f8adb29088c344f#egg=personal_expense_tracker
 platformdirs==4.4.0
 pluggy==1.6.0
 pre_commit==4.3.0
+psycopg[binary]==3.2.3
 pycparser==2.22
 Pygments==2.19.2
 PyJWT==2.10.1

@@ -21,7 +21,7 @@ help:
 
 # Install dependencies
 install:
-	pip install -e .
+	pip install -e . && pip install -r requirements.txt
 
 # Run development server
 run:
