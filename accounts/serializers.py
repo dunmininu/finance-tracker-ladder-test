@@ -70,7 +70,7 @@ class UserSignupResponseSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "email", "message"]
 
-    def get_message(self, obj):
+    def get_message(self, obj) -> str:
         """Return success message."""
         return "User created successfully"
 
@@ -118,7 +118,7 @@ class UserLoginResponseSerializer(serializers.Serializer):
 
     data = serializers.SerializerMethodField()
 
-    def get_data(self, obj):
+    def get_data(self, obj) -> dict:
         """Return nested data structure."""
         return {
             "id": str(obj["user"].id),

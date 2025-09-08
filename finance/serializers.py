@@ -5,6 +5,8 @@ Handles income and expenditure data with camelCase field mapping for API respons
 """
 
 
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from .models import Expenditure, Income
@@ -18,6 +20,9 @@ class IncomeSerializer(serializers.ModelSerializer):
     """
 
     nameOfRevenue = serializers.CharField(source="name_of_revenue")
+    amount = serializers.DecimalField(
+        max_digits=12, decimal_places=2, min_value=Decimal("0.01")
+    )
 
     class Meta:
         model = Income
@@ -39,6 +44,9 @@ class IncomeDetailSerializer(serializers.ModelSerializer):
     """
 
     nameOfRevenue = serializers.CharField(source="name_of_revenue")
+    amount = serializers.DecimalField(
+        max_digits=12, decimal_places=2, min_value=Decimal("0.01")
+    )
 
     class Meta:
         model = Income
@@ -54,6 +62,9 @@ class IncomeCreateUpdateSerializer(serializers.ModelSerializer):
     """
 
     nameOfRevenue = serializers.CharField(source="name_of_revenue")
+    amount = serializers.DecimalField(
+        max_digits=12, decimal_places=2, min_value=Decimal("0.01")
+    )
 
     class Meta:
         model = Income
@@ -80,7 +91,10 @@ class ExpenditureSerializer(serializers.ModelSerializer):
 
     nameOfItem = serializers.CharField(source="name_of_item")
     estimatedAmount = serializers.DecimalField(
-        source="estimated_amount", max_digits=12, decimal_places=2
+        source="estimated_amount",
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
     )
 
     class Meta:
@@ -104,7 +118,10 @@ class ExpenditureDetailSerializer(serializers.ModelSerializer):
 
     nameOfItem = serializers.CharField(source="name_of_item")
     estimatedAmount = serializers.DecimalField(
-        source="estimated_amount", max_digits=12, decimal_places=2
+        source="estimated_amount",
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
     )
 
     class Meta:
@@ -122,7 +139,10 @@ class ExpenditureCreateUpdateSerializer(serializers.ModelSerializer):
 
     nameOfItem = serializers.CharField(source="name_of_item")
     estimatedAmount = serializers.DecimalField(
-        source="estimated_amount", max_digits=12, decimal_places=2
+        source="estimated_amount",
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
     )
 
     class Meta:
