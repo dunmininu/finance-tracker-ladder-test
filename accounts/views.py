@@ -171,18 +171,6 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
             404: OpenApiResponse(description="User not found"),
         },
     )
-    @extend_schema(
-        operation_id="updateUser",
-        tags=["user"],
-        summary="Update user",
-        description="This can only be done by the logged in user.",
-        methods=["PUT"],
-        request=UserProfileUpdateSerializer,
-        responses={
-            200: OpenApiResponse(description="User details updated successfully!"),
-            404: OpenApiResponse(description="User not found"),
-        },
-    )
     def retrieve(self, request, pk=None):
         """Get user profile by ID."""
         try:
@@ -201,6 +189,18 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        operation_id="updateUser",
+        tags=["user"],
+        summary="Update user",
+        description="This can only be done by the logged in user.",
+        methods=["PUT"],
+        request=UserProfileUpdateSerializer,
+        responses={
+            200: OpenApiResponse(description="User details updated successfully!"),
+            404: OpenApiResponse(description="User not found"),
+        },
+    )
     def update(self, request, pk=None):
         """Update user profile by ID."""
         try:
