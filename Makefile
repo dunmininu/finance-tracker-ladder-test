@@ -89,6 +89,6 @@ setup: install
 	pre-commit install
 	@echo "Development environment setup complete!"
 	@echo "Don't forget to:"
-	@echo "1. Edit .env with your settings"
+	@echo "1. Edit .env with the settings"
 	@echo "2. Run 'make migrate' to setup database"
 	@echo "3. Run 'make superuser' to create admin user"

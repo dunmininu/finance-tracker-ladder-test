@@ -34,6 +34,10 @@ class User(AbstractUser):
         max_length=150, unique=True, help_text="Username for display purposes"
     )
 
+    # Tell Django to use email as the username field for authentication
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+
     first_name = models.CharField(
         max_length=150, blank=True, help_text="User's first name"
     )

@@ -41,7 +41,7 @@ A production-ready Django REST Framework API for tracking personal expenses, bui
 3. **Environment setup**:
    ```bash
    cp .env.example .env
-   # Edit .env with your settings
+   # Edit .env with the settings
    ```
 
 4. **Database setup**:
@@ -209,10 +209,9 @@ finance_tracker/
 ## Contributing
 
 1. Install pre-commit hooks: `pre-commit install`
-2. Make your changes
-3. Run tests: `make test`
-4. Format code: `make fmt`
-5. Submit a pull request
+2. Run tests: `make test`
+3. Format code: `make fmt`
+4. Submit a pull request
 
 ## License
 
