@@ -51,7 +51,10 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
 
     def get_permissions(self):
         """Return appropriate permissions based on action."""
-        if self.action in ["signup", "login"]:
+        # Handle OPTIONS requests (CORS preflight) - allow them for all endpoints
+        if self.request.method == "OPTIONS":
+            permission_classes = [AllowAny]
+        elif self.action in ["signup", "login"]:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
