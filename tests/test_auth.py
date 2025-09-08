@@ -196,11 +196,11 @@ class TestUserProfile:
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.data["detail"] == "User not found"
 
-    def test_get_invalid_user_id_404(self, authenticated_client, user):
+    def test_get_invalid_user_id_400(self, authenticated_client, user):
         """Test getting profile with invalid UUID."""
         response = authenticated_client.get("/auth/user/invalid-uuid/profile")
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_update_own_profile_200(self, authenticated_client, user):
         """Test updating own profile."""

@@ -12,8 +12,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-from accounts import views as accounts_views
-from finance import views as finance_views
+from accounts.views import UserViewSet
+from finance.views import ExpenditureViewSet, IncomeViewSet
 
 urlpatterns = [
     # Admin
@@ -27,23 +27,37 @@ urlpatterns = [
     ),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # Authentication endpoints (exact paths from OpenAPI spec)
-    path("auth/signup", accounts_views.signup, name="signup"),
-    path("auth/login", accounts_views.login, name="login"),
-    path("auth/logout", accounts_views.logout, name="logout"),
+    path("auth/signup", UserViewSet.as_view({"post": "signup"}), name="signup"),
+    path("auth/login", UserViewSet.as_view({"post": "login"}), name="login"),
+    path("auth/logout", UserViewSet.as_view({"post": "logout"}), name="logout"),
     path(
-        "auth/user/<str:userID>/profile",
-        accounts_views.user_profile,
+        "auth/user/<str:pk>/profile",
+        UserViewSet.as_view({"get": "retrieve", "put": "update"}),
         name="user_profile",
     ),
     # User finance endpoints (exact paths from OpenAPI spec)
-    path("user/income", finance_views.user_income, name="user_income"),
     path(
-        "user/income/<str:incomeID>", finance_views.income_detail, name="income_detail"
+        "user/income",
+        IncomeViewSet.as_view({"get": "list", "post": "create"}),
+        name="user_income",
     ),
-    path("user/expenditure", finance_views.user_expenditure, name="user_expenditure"),
     path(
-        "user/expenditure/<str:expenditureID>",
-        finance_views.expenditure_detail,
+        "user/income/<str:pk>",
+        IncomeViewSet.as_view(
+            {"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
+        name="income_detail",
+    ),
+    path(
+        "user/expenditure",
+        ExpenditureViewSet.as_view({"get": "list", "post": "create"}),
+        name="user_expenditure",
+    ),
+    path(
+        "user/expenditure/<str:pk>",
+        ExpenditureViewSet.as_view(
+            {"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
         name="expenditure_detail",
     ),
 ]
