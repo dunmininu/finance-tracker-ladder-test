@@ -4,7 +4,6 @@ API views for the accounts app.
 Handles user authentication, registration, and profile management.
 """
 
-import uuid
 
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
@@ -155,15 +154,8 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def user_profile(request, userID):
     """Get or update user profile by ID."""
-    try:
-        user_uuid = uuid.UUID(userID)
-    except ValueError:
-        return Response(
-            {"detail": "Invalid user ID"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
     # Users can only access their own profile
-    if str(request.user.id) != user_uuid:
+    if str(request.user.id) != userID:
         return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
