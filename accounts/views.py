@@ -34,7 +34,6 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
     """
 
     queryset = User.objects.all()
-    # Remove default permission_classes - we'll handle this in get_permissions()
 
     def get_serializer_class(self):
         """Return appropriate serializer based on action."""
@@ -71,7 +70,7 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
             ),
             400: OpenApiResponse(description="Invalid input"),
         },
-        auth=[],  # Explicitly disable authentication for this endpoint
+        auth=[],
     )
     @action(detail=False, methods=["post"])
     def signup(self, request):
