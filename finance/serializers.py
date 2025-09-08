@@ -153,8 +153,8 @@ class ExpenditureSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Estimated amount must be positive.")
 
-        # Check for reasonable upper limit (1 billion)
-        if value > Decimal("1000000000"):
+        # Check for reasonable upper limit (100 billion)
+        if value > Decimal("100000000000"):
             raise serializers.ValidationError("Estimated amount exceeds maximum limit.")
 
         # Check for precision issues
