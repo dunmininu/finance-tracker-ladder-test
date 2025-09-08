@@ -1,18 +1,23 @@
-.PHONY: install run test lint fmt migrate superuser schema clean help
+.PHONY: install run test lint fmt migrate superuser schema clean help docker-build docker-up docker-down docker-logs docker-shell
 
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  install     Install project dependencies"
-	@echo "  run         Run the Django development server"
-	@echo "  test        Run tests with pytest"
-	@echo "  lint        Run ruff linter"
-	@echo "  fmt         Format code with black"
-	@echo "  migrate     Run Django migrations"
-	@echo "  superuser   Create Django superuser"
-	@echo "  schema      Generate OpenAPI schema"
-	@echo "  clean       Clean up temporary files"
-	@echo "  help        Show this help message"
+	@echo "  install       Install project dependencies"
+	@echo "  run           Run the Django development server"
+	@echo "  test          Run tests with pytest"
+	@echo "  lint          Run ruff linter"
+	@echo "  fmt           Format code with black"
+	@echo "  migrate       Run Django migrations"
+	@echo "  superuser     Create Django superuser"
+	@echo "  schema        Generate OpenAPI schema"
+	@echo "  clean         Clean up temporary files"
+	@echo "  docker-build  Build Docker image"
+	@echo "  docker-up     Start Docker containers"
+	@echo "  docker-down   Stop Docker containers"
+	@echo "  docker-logs   Show Docker logs"
+	@echo "  docker-shell  Access Docker container shell"
+	@echo "  help          Show this help message"
 
 # Install dependencies
 install:
@@ -61,6 +66,22 @@ clean:
 	rm -rf .coverage
 	rm -rf htmlcov/
 	rm -rf .pytest_cache/
+
+# Docker commands
+docker-build:
+	docker-compose build
+
+docker-up:
+	docker-compose up -d
+
+docker-down:
+	docker-compose down
+
+docker-logs:
+	docker-compose logs -f
+
+docker-shell:
+	docker-compose exec web bash
 
 # Setup development environment
 setup: install

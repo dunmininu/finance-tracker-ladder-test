@@ -18,8 +18,11 @@ A production-ready Django REST Framework API for tracking personal expenses, bui
 
 - Python 3.11+
 - pip or poetry
+- Docker (optional)
 
 ### Installation
+
+#### Option 1: Local Development
 
 1. **Clone and setup environment**:
    ```bash
@@ -50,6 +53,29 @@ A production-ready Django REST Framework API for tracking personal expenses, bui
 5. **Run the server**:
    ```bash
    make run
+   ```
+
+#### Option 2: Docker Development
+
+1. **Build and start containers**:
+   ```bash
+   make docker-build
+   make docker-up
+   ```
+
+2. **Run migrations**:
+   ```bash
+   docker-compose exec web python manage.py migrate
+   docker-compose exec web python manage.py createsuperuser
+   ```
+
+3. **Access the application**:
+   - API: http://localhost:8000/
+   - Admin: http://localhost:8000/admin/
+
+4. **Stop containers**:
+   ```bash
+   make docker-down
    ```
 
 The API will be available at `http://localhost:8000/`
@@ -146,6 +172,15 @@ make lint
 make migrate      # Run migrations
 make superuser    # Create superuser
 make schema       # Generate OpenAPI schema
+```
+
+### Docker Commands
+```bash
+make docker-build  # Build Docker image
+make docker-up     # Start containers
+make docker-down   # Stop containers
+make docker-logs   # View logs
+make docker-shell  # Access container shell
 ```
 
 ## Project Structure
