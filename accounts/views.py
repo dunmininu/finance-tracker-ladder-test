@@ -34,7 +34,7 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
     """
 
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated]
+    # Remove default permission_classes - we'll handle this in get_permissions()
 
     def get_serializer_class(self):
         """Return appropriate serializer based on action."""
@@ -71,8 +71,9 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
             ),
             400: OpenApiResponse(description="Invalid input"),
         },
+        auth=[],  # Explicitly disable authentication for this endpoint
     )
-    @action(detail=False, methods=["post"], permission_classes=[AllowAny])
+    @action(detail=False, methods=["post"])
     def signup(self, request):
         """Register a new user."""
         serializer = UserSignupSerializer(data=request.data)
@@ -94,8 +95,9 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
             ),
             400: OpenApiResponse(description="Invalid username/password"),
         },
+        auth=[],  # Explicitly disable authentication for this endpoint
     )
-    @action(detail=False, methods=["post"], permission_classes=[AllowAny])
+    @action(detail=False, methods=["post"])
     def login(self, request):
         """Log in a user and return JWT tokens."""
         serializer = UserLoginSerializer(data=request.data)
