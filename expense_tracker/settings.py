@@ -154,6 +154,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_PAGINATION_CLASS": None,  # Disable pagination for this API
+    "EXCEPTION_HANDLER": "expense_tracker.exceptions.custom_exception_handler",
 }
 
 # JWT Settings

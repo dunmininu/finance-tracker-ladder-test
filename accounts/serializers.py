@@ -35,17 +35,72 @@ class UserSignupSerializer(serializers.ModelSerializer):
         }
 
     def validate_email(self, value):
-        """Ensure email is unique."""
+        """Ensure email is unique and properly formatted."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Email cannot be empty.")
+
+        value = value.strip().lower()
+
+        if len(value) > 254:  # RFC 5321 limit
+            raise serializers.ValidationError("Email address is too long.")
+
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with this email already exists.")
+
         return value
 
     def validate_username(self, value):
-        """Ensure username is unique."""
+        """Ensure username is unique and properly formatted."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Username cannot be empty.")
+
+        value = value.strip()
+
+        if len(value) < 3:
+            raise serializers.ValidationError(
+                "Username must be at least 3 characters long."
+            )
+
+        if len(value) > 150:
+            raise serializers.ValidationError("Username cannot exceed 150 characters.")
+
+        # Check for valid characters (alphanumeric, underscore, hyphen)
+        if not value.replace("_", "").replace("-", "").isalnum():
+            raise serializers.ValidationError(
+                "Username can only contain letters, numbers, underscores, and hyphens."
+            )
+
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError(
                 "A user with this username already exists."
             )
+
+        return value
+
+    def validate_first_name(self, value):
+        """Validate first name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("First name cannot be empty.")
+
+        value = value.strip()
+
+        if len(value) > 150:
+            raise serializers.ValidationError(
+                "First name cannot exceed 150 characters."
+            )
+
+        return value
+
+    def validate_last_name(self, value):
+        """Validate last name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Last name cannot be empty.")
+
+        value = value.strip()
+
+        if len(value) > 150:
+            raise serializers.ValidationError("Last name cannot exceed 150 characters.")
+
         return value
 
     def create(self, validated_data):

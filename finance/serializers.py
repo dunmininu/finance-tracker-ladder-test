@@ -30,10 +30,33 @@ class IncomeSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
     def validate_amount(self, value):
-        """Ensure amount is positive."""
+        """Ensure amount is positive and within reasonable limits."""
         if value <= 0:
             raise serializers.ValidationError("Amount must be positive.")
+
+        # Check for reasonable upper limit (1 billion)
+        if value > Decimal("1000000000"):
+            raise serializers.ValidationError("Amount exceeds maximum limit.")
+
+        # Check for precision issues
+        if value.as_tuple().exponent < -2:
+            raise serializers.ValidationError(
+                "Amount cannot have more than 2 decimal places."
+            )
+
         return value
+
+    def validate_nameOfRevenue(self, value):
+        """Validate revenue name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Revenue name cannot be empty.")
+
+        if len(value.strip()) > 120:  # Match model max_length
+            raise serializers.ValidationError(
+                "Revenue name cannot exceed 120 characters."
+            )
+
+        return value.strip()
 
 
 class IncomeDetailSerializer(serializers.ModelSerializer):
@@ -71,10 +94,33 @@ class IncomeCreateUpdateSerializer(serializers.ModelSerializer):
         fields = ["nameOfRevenue", "amount"]
 
     def validate_amount(self, value):
-        """Ensure amount is positive."""
+        """Ensure amount is positive and within reasonable limits."""
         if value <= 0:
             raise serializers.ValidationError("Amount must be positive.")
+
+        # Check for reasonable upper limit (1 billion)
+        if value > Decimal("1000000000"):
+            raise serializers.ValidationError("Amount exceeds maximum limit.")
+
+        # Check for precision issues
+        if value.as_tuple().exponent < -2:
+            raise serializers.ValidationError(
+                "Amount cannot have more than 2 decimal places."
+            )
+
         return value
+
+    def validate_nameOfRevenue(self, value):
+        """Validate revenue name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Revenue name cannot be empty.")
+
+        if len(value.strip()) > 120:  # Match model max_length
+            raise serializers.ValidationError(
+                "Revenue name cannot exceed 120 characters."
+            )
+
+        return value.strip()
 
     def create(self, validated_data):
         """Create income record for the authenticated user."""
@@ -103,10 +149,41 @@ class ExpenditureSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
     def validate_estimatedAmount(self, value):
-        """Ensure estimated amount is positive."""
+        """Ensure estimated amount is positive and within reasonable limits."""
         if value <= 0:
             raise serializers.ValidationError("Estimated amount must be positive.")
+
+        # Check for reasonable upper limit (1 billion)
+        if value > Decimal("1000000000"):
+            raise serializers.ValidationError("Estimated amount exceeds maximum limit.")
+
+        # Check for precision issues
+        if value.as_tuple().exponent < -2:
+            raise serializers.ValidationError(
+                "Estimated amount cannot have more than 2 decimal places."
+            )
+
         return value
+
+    def validate_nameOfItem(self, value):
+        """Validate item name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Item name cannot be empty.")
+
+        if len(value.strip()) > 120:  # Match model max_length
+            raise serializers.ValidationError("Item name cannot exceed 120 characters.")
+
+        return value.strip()
+
+    def validate_category(self, value):
+        """Validate category."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Category cannot be empty.")
+
+        if len(value.strip()) > 60:  # Match model max_length
+            raise serializers.ValidationError("Category cannot exceed 60 characters.")
+
+        return value.strip()
 
 
 class ExpenditureDetailSerializer(serializers.ModelSerializer):
@@ -150,10 +227,41 @@ class ExpenditureCreateUpdateSerializer(serializers.ModelSerializer):
         fields = ["category", "nameOfItem", "estimatedAmount"]
 
     def validate_estimatedAmount(self, value):
-        """Ensure estimated amount is positive."""
+        """Ensure estimated amount is positive and within reasonable limits."""
         if value <= 0:
             raise serializers.ValidationError("Estimated amount must be positive.")
+
+        # Check for reasonable upper limit (1 billion)
+        if value > Decimal("1000000000"):
+            raise serializers.ValidationError("Estimated amount exceeds maximum limit.")
+
+        # Check for precision issues
+        if value.as_tuple().exponent < -2:
+            raise serializers.ValidationError(
+                "Estimated amount cannot have more than 2 decimal places."
+            )
+
         return value
+
+    def validate_nameOfItem(self, value):
+        """Validate item name."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Item name cannot be empty.")
+
+        if len(value.strip()) > 120:  # Match model max_length
+            raise serializers.ValidationError("Item name cannot exceed 120 characters.")
+
+        return value.strip()
+
+    def validate_category(self, value):
+        """Validate category."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Category cannot be empty.")
+
+        if len(value.strip()) > 60:  # Match model max_length
+            raise serializers.ValidationError("Category cannot exceed 60 characters.")
+
+        return value.strip()
 
     def create(self, validated_data):
         """Create expenditure record for the authenticated user."""
