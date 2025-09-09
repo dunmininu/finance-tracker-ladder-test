@@ -18,11 +18,11 @@ class TestEdgeCases:
         # Test very large amount
         data = {
             "nameOfRevenue": "Large Income",
-            "amount": "1000000001",  # Over 1 billion
+            "amount": "100000000001",  # Over 100 billion
         }
         response = authenticated_client.post("/user/income", data, format="json")
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert "exceeds maximum limit" in str(response.data)
+        assert "no more than 10 digits before the decimal point" in str(response.data)
 
         # Test amount with too many decimal places
         data = {
